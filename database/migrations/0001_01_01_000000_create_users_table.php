@@ -12,20 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->uuid('id')->primary( 3);
+            $table->string('name', 120);
+            $table->string('cpf_cnpj', 14);
+            $table->enum('type',['customer', 'merchant']);
+            $table->string('email', 120)->unique();
+            $table->bigInteger('balance');
+            $table->string('password', 255);
             $table->timestamps();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
         });
     }
 
@@ -35,6 +29,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('sessions');
     }
 };
