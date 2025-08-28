@@ -24,21 +24,29 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'id' => fake()->uuid(),
             'name' => fake()->name(),
+            'cpf_cnpj' => fake()->numberBetween(11111111111, 99999999999999),
+            'type' => fake()->randomElement(['customer', 'merchant']),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'balance' => fake()->numberBetween(0, 10000000),
             'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function customer(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'type' => 'customer',
+            'cpf_cnpj' => fake()->numberBetween(11111111111, 99999999999),
+        ]);
+    }
+
+    public function merchant(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => 'merchant',
+            'cpf_cnpj' => fake()->numberBetween(11111111111111, 99999999999999),
         ]);
     }
 }
