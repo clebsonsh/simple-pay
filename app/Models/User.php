@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Database\Factories\UserFactory;
 
@@ -46,5 +47,15 @@ class User extends Model
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function asPayerTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'payer_id', 'id');
+    }
+
+    public function asPayeeTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'payee_id', 'id');
     }
 }
