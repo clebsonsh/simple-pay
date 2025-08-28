@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('cpf_cnpj', 14);
             $table->enum('type',['customer', 'merchant']);
             $table->string('email', 120)->unique();
-            $table->bigInteger('balance');
+            $table->unsignedBigInteger('balance');
             $table->string('password', 255);
             $table->timestamps();
         });
