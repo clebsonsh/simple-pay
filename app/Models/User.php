@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Database\Factories\UserFactory;
 
-class User
+class User extends Model
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +20,10 @@ class User
      */
     protected $fillable = [
         'name',
+        'cpf_cnpj',
+        'type',
         'email',
+        'balance',
         'password',
     ];
 
@@ -29,7 +34,6 @@ class User
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
