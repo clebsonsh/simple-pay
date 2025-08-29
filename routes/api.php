@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\TransferController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return ['name' => 'john doe'];
-});
+Route::post('/v1/transfer', TransferController::class);
