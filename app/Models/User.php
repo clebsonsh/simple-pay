@@ -49,12 +49,12 @@ class User extends Model
         ];
     }
 
-    public function asPayerTransfers(): HasMany
+    public function transfersAsPayer(): HasMany
     {
         return $this->hasMany(Transfer::class, 'payer_id', 'id');
     }
 
-    public function asPayeeTransfers(): HasMany
+    public function transfersAsPayee(): HasMany
     {
         return $this->hasMany(Transfer::class, 'payee_id', 'id');
     }
