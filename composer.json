@@ -62,10 +62,14 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "coverage": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test --coverage"
+        ],
         "ci": [
             "composer format",
             "composer lint",
-            "composer test"
+            "composer coverage"
         ]
     },
     "extra": {
