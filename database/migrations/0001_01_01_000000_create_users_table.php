@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary( 3);
+            $table->uuid('id')->primary();
             $table->string('name', 120);
             $table->string('cpf_cnpj', 14)->unique();
-            $table->enum('type',['customer', 'merchant']);
+            $table->enum('type', ['customer', 'merchant']);
             $table->string('email', 120)->unique();
             $table->unsignedBigInteger('balance');
             $table->string('password', 255);

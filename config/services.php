@@ -35,4 +35,7 @@ return [
         ],
     ],
 
+    'authorization_service' => [
+        'url' => env('AUTHORIZATION_SERVICE_URL'),
+    ],
 ];

@@ -2,23 +2,19 @@
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use Database\Factories\UserFactory;
 
 class User extends Model
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasUuids;
+    use HasFactory, HasUuids, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    /** @var list<string> */
     protected $fillable = [
         'name',
         'cpf_cnpj',
@@ -28,20 +24,12 @@ class User extends Model
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    /** @var list<string> */
     protected $hidden = [
         'password',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     protected function casts(): array
     {
         return [
@@ -49,12 +37,14 @@ class User extends Model
         ];
     }
 
-    public function asPayerTransfers(): HasMany
+    /** @return HasMany<Transfer, $this> */
+    public function transfersAsPayer(): HasMany
     {
         return $this->hasMany(Transfer::class, 'payer_id', 'id');
     }
 
-    public function asPayeeTransfers(): HasMany
+    /** @return HasMany<Transfer, $this> */
+    public function transfersAsPayee(): HasMany
     {
         return $this->hasMany(Transfer::class, 'payee_id', 'id');
     }
