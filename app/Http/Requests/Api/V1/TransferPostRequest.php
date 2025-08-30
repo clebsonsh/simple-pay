@@ -21,7 +21,6 @@ class TransferPostRequest extends FormRequest
             ],
             'payer' => [
                 'required',
-                'exists:users,id',
                 /** @todo move this business logic to service */
                 // Don't allow merchants to send transfers
                 Rule::exists('users', 'id')
@@ -48,7 +47,7 @@ class TransferPostRequest extends FormRequest
     {
         return [
             'payer' => [
-                'exists' => 'The payer can not be users type merchant',
+                'exists' => 'The payer can not be a user type merchant',
                 'prohibited' => 'The payer does not have enough balance to send this transfer',
             ],
         ];

@@ -17,13 +17,11 @@ class TransferController extends Controller
         /** @var string[] $data */
         $data = $request->validated();
         try {
-            $transfer = $transferService->send($data);
-
-            return response()->json($transfer, Response::HTTP_CREATED);
+            return response()->json($transferService->send($data), Response::HTTP_CREATED);
         } catch (UnauthorizedTransferException) {
             return response()->json([
                 'error' => 'you are not authorized to make this transfer',
-            ], Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_FORBIDDEN);
         } catch (\Throwable $th) {
             Log::error($th);
 
