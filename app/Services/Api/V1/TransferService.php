@@ -2,7 +2,7 @@
 
 namespace App\Services\Api\V1;
 
-use App\Exceptions\UnauthorizedTransferExecption;
+use App\Exceptions\UnauthorizedTransferException;
 use App\Models\Transfer;
 use App\Repositories\Api\V1\TransferRepository;
 use App\Repositories\Api\V1\UserRepository;
@@ -21,11 +21,11 @@ readonly class TransferService
     /**
      * @param  string[]  $data
      *
-     * @throws UnauthorizedTransferExecption|Throwable
+     * @throws UnauthorizedTransferException|Throwable
      */
     public function send(array $data): ?Transfer
     {
-        throw_unless($this->authorizationService->check(), new UnauthorizedTransferExecption);
+        throw_unless($this->authorizationService->check(), new UnauthorizedTransferException);
 
         $transfer = null;
 
