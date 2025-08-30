@@ -14,7 +14,7 @@
   - [x] Centralize database queries in repositories
   - [ ] When receiving a transfer the user must be notified -> [Notification Service](https://util.devi.tools/api/v1/notify) (POST)
 - [ ] Unit tests
-- [ ] Feature tests
+- [x] Feature tests
 - [ ] Docker
 - [ ] Documentation (AI will do that)
 - [x] Use Pint for code quality and style
