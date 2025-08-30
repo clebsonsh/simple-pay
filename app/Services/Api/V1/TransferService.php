@@ -7,7 +7,6 @@ use App\Models\Transfer;
 use App\Repositories\Api\V1\TransferRepository;
 use App\Repositories\Api\V1\UserRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 readonly class TransferService
@@ -27,15 +26,11 @@ readonly class TransferService
     {
         throw_unless($this->authorizationService->check(), new UnauthorizedTransferException);
 
-        $transfer = null;
-
-        try {
+        return DB::transaction(function () use ($data) {
             $value = (int) $data['value'];
 
             $payer_id = $data['payer'];
             $payee_id = $data['payee'];
-
-            DB::beginTransaction();
 
             $transfer = $this->transferRepository
                 ->create($payer_id, $payee_id, $value);
@@ -46,12 +41,7 @@ readonly class TransferService
             $this->userRepository
                 ->incrementBalanceById($payee_id, $value);
 
-            DB::commit();
-        } catch (Throwable $th) {
-            Log::error($th);
-            DB::rollBack();
-        }
-
-        return $transfer;
+            return $transfer;
+        });
     }
 }
