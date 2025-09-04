@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\UnauthorizedTransferException;
+use App\Exceptions\WrongUserTypeException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\TransferPostRequest;
 use App\Services\Api\V1\TransferService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
 
 class TransferController extends Controller
 {
@@ -18,9 +19,13 @@ class TransferController extends Controller
         $data = $request->validated();
         try {
             return response()->json($transferService->send($data), Response::HTTP_CREATED);
-        } catch (UnauthorizedTransferException) {
+        } catch (WrongUserTypeException $e) {
             return response()->json([
-                'error' => 'you are not authorized to make this transfer',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (UnauthorizedTransferException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
             ], Response::HTTP_FORBIDDEN);
         } catch (\Throwable $th) {
             Log::error($th);

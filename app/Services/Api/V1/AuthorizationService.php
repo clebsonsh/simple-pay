@@ -4,8 +4,8 @@ namespace App\Services\Api\V1;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
-use Symfony\Component\HttpFoundation\Response;
 
 class AuthorizationService
 {

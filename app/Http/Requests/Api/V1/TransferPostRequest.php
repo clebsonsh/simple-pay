@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\V1;
 
 use App\Models\User;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -21,11 +20,9 @@ class TransferPostRequest extends FormRequest
             ],
             'payer' => [
                 'required',
-                /** @todo move this business logic to service */
-                // Don't allow merchants to send transfers
-                Rule::exists('users', 'id')
-                    ->where(fn (Builder $q) => $q->whereNot('type', 'merchant')),
+                'exists:users,id',
                 // User balance need to bigger than transfer value
+                /** @todo create a test for this before move it to a transaction service */
                 Rule::prohibitedIf(function () {
                     $payer = User::query()->where('id', $this->payer)->sole();
 
