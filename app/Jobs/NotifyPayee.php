@@ -11,8 +11,10 @@ class NotifyPayee implements ShouldQueue
 {
     use Queueable;
 
+    /** @var int */
     public $tries = 5;
 
+    /** @var int */
     public $backoff = 30;
 
     public function __construct(private readonly string $payee_id) {}
