@@ -38,4 +38,8 @@ return [
     'authorization_service' => [
         'url' => env('AUTHORIZATION_SERVICE_URL'),
     ],
+
+    'notification_service' => [
+        'url' => env('NOTIFICATION_SERVICE_URL'),
+    ],
 ];

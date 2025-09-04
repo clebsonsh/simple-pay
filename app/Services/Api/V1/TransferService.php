@@ -6,6 +6,7 @@ use App\Enums\UserType;
 use App\Exceptions\InsufficientBalanceException;
 use App\Exceptions\UnauthorizedTransferException;
 use App\Exceptions\WrongUserTypeException;
+use App\Jobs\NotifyPayee;
 use App\Models\Transfer;
 use App\Repositories\Api\V1\TransferRepository;
 use App\Repositories\Api\V1\UserRepository;
@@ -27,7 +28,7 @@ readonly class TransferService
      */
     public function send(array $data): ?Transfer
     {
-        return DB::transaction(function () use ($data) {
+        $transfer = DB::transaction(function () use ($data) {
             $value = (int) $data['value'];
 
             $payer_id = $data['payer'];
@@ -59,5 +60,9 @@ readonly class TransferService
 
             return $transfer;
         });
+
+        NotifyPayee::dispatch($data['payee']);
+
+        return $transfer;
     }
 }

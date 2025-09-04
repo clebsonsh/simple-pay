@@ -2,7 +2,7 @@
 
 ## to do
 - [x] Databases modeling
-- [ ] Transfer endpoint
+- [x] Transfer endpoint
   - [x] `TransferControler` as a invoke controller
   - [x] `TransferPostRequest`
   - [x] Validate transfer
@@ -12,7 +12,7 @@
     - [x] Verify is the user is authorized to make the transfer -> [Authorization Service](https://util.devi.tools/api/v2/authorize) (GET)
   - [x] Centralize business logic in services
   - [x] Centralize database queries in repositories
-  - [ ] When receiving a transfer the user must be notified -> [Notification Service](https://util.devi.tools/api/v1/notify) (POST)
+  - [x] When receiving a transfer the user must be notified -> [Notification Service](https://util.devi.tools/api/v1/notify) (POST)
 - [ ] Unit tests
 - [x] Feature tests
 - [ ] Docker
