@@ -2,6 +2,8 @@
 
 namespace App\Services\Api\V1;
 
+use App\Enums\UserType;
+use App\Exceptions\InsufficientBalanceException;
 use App\Exceptions\UnauthorizedTransferException;
 use App\Exceptions\WrongUserTypeException;
 use App\Models\Transfer;
@@ -33,9 +35,15 @@ readonly class TransferService
 
             $payer = $this->userRepository->getById($payer_id);
 
-            /** @todo create UserType enum */
-            if ($payer->type == 'merchant') {
+            /** @var UserType */
+            $userType = $payer->type;
+
+            if ($userType === UserType::Merchant) {
                 throw new WrongUserTypeException;
+            }
+
+            if ($payer->balance < $value) {
+                throw new InsufficientBalanceException;
             }
 
             throw_unless($this->authorizationService->check(), new UnauthorizedTransferException);
