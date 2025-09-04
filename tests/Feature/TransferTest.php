@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
-use Symfony\Component\HttpFoundation\Response;
 
 use function Pest\Laravel\postJson;
 
@@ -47,7 +47,7 @@ describe('Transfer', function () {
 
         postJson(route('transfer'), $body)
             ->assertUnprocessable()
-            ->assertJsonFragment(['payer' => ['The payer can not be a user type merchant']]);
+            ->assertJsonFragment(['error' => 'The payer can not be a user type merchant']);
     });
 
     it('returns a forbidden error when the authorization service denies the transfer', function () {
