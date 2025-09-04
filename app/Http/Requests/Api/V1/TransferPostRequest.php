@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class TransferPostRequest extends FormRequest
 {
@@ -21,13 +19,6 @@ class TransferPostRequest extends FormRequest
             'payer' => [
                 'required',
                 'exists:users,id',
-                // User balance need to bigger than transfer value
-                /** @todo create a test for this before move it to a transaction service */
-                Rule::prohibitedIf(function () {
-                    $payer = User::query()->where('id', $this->payer)->sole();
-
-                    return $payer->balance < $this->value;
-                }),
             ],
             'payee' => [
                 'required',
@@ -35,18 +26,5 @@ class TransferPostRequest extends FormRequest
             ],
         ];
 
-    }
-
-    /**
-     * @return array<array<string>>
-     */
-    public function messages(): array
-    {
-        return [
-            'payer' => [
-                'exists' => 'The payer can not be a user type merchant',
-                'prohibited' => 'The payer does not have enough balance to send this transfer',
-            ],
-        ];
     }
 }

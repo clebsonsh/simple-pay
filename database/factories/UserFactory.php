@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
@@ -26,7 +27,7 @@ class UserFactory extends Factory
             'id' => fake()->uuid(),
             'name' => fake()->name(),
             'cpf_cnpj' => fake()->numberBetween(11111111111, 99999999999999),
-            'type' => fake()->randomElement(['customer', 'merchant']),
+            'type' => fake()->randomElement(UserType::cases()),
             'email' => fake()->unique()->safeEmail(),
             'balance' => fake()->numberBetween(0, 10000000),
             'password' => static::$password ??= Hash::make('password'),
@@ -36,7 +37,7 @@ class UserFactory extends Factory
     public function customer(): static
     {
         return $this->state(fn (array $attributes) => [
-            'type' => 'customer',
+            'type' => UserType::Cusotmer,
             'cpf_cnpj' => fake()->numberBetween(11111111111, 99999999999),
         ]);
     }
@@ -44,7 +45,7 @@ class UserFactory extends Factory
     public function merchant(): static
     {
         return $this->state(fn (array $attributes) => [
-            'type' => 'merchant',
+            'type' => UserType::Merchant,
             'cpf_cnpj' => fake()->numberBetween(11111111111111, 99999999999999),
         ]);
     }

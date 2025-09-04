@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Exceptions\InsufficientBalanceException;
 use App\Exceptions\UnauthorizedTransferException;
 use App\Exceptions\WrongUserTypeException;
 use App\Http\Controllers\Controller;
@@ -19,7 +20,7 @@ class TransferController extends Controller
         $data = $request->validated();
         try {
             return response()->json($transferService->send($data), Response::HTTP_CREATED);
-        } catch (WrongUserTypeException $e) {
+        } catch (WrongUserTypeException|InsufficientBalanceException $e) {
             return response()->json([
                 'error' => $e->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
