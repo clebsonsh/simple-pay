@@ -1,0 +1,19 @@
+services:
+  redis:
+    image: redis
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - "redis_data:/data"
+    ports:
+      - "6379:6379"
+    networks:
+      - simple_pay
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  simple_pay:
+    driver: bridge
