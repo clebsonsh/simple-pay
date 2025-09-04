@@ -50,6 +50,24 @@ describe('Transfer', function () {
             ->assertJsonFragment(['error' => 'The payer can not be a user type merchant']);
     });
 
+    it('prevents a users with insuficent balance from transfer', function () {
+        $payer = User::factory()->customer()->create([
+            'balance' => 999,
+        ]);
+
+        $payee = User::factory()->merchant()->create();
+
+        $body = [
+            'value' => 1000,
+            'payer' => $payer->id,
+            'payee' => $payee->id,
+        ];
+
+        postJson(route('transfer'), $body)
+            ->assertUnprocessable()
+            ->assertJsonFragment(['error' => 'The payer does not have enough balance to send this transfer']);
+    });
+
     it('returns a forbidden error when the authorization service denies the transfer', function () {
         $url = config('services.authorization_service.url').'authorize';
 
