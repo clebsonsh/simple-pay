@@ -80,16 +80,7 @@ describe('Transfer', function () {
                 ], Response::HTTP_FORBIDDEN),
         ]);
 
-        $payer = User::factory()->customer()->create();
-        $payee = User::factory()->merchant()->create();
-
-        $body = [
-            'value' => 1000,
-            'payer' => $payer->id,
-            'payee' => $payee->id,
-        ];
-
-        postJson(route('transfer'), $body)
+        postJson(route('transfer'), getDefaultTransferBody())
             ->assertForbidden()
             ->assertJsonFragment(['error' => 'you are not authorized to make this transfer']);
     });
@@ -102,17 +93,21 @@ describe('Transfer', function () {
         $transferServiceMock->shouldReceive('send')
             ->andThrow(new Exception('unknow exception'));
 
-        $payer = User::factory()->customer()->create();
-        $payee = User::factory()->merchant()->create();
-
-        $body = [
-            'value' => 1000,
-            'payer' => $payer->id,
-            'payee' => $payee->id,
-        ];
-
-        postJson(route('transfer'), $body)
+        postJson(route('transfer'), getDefaultTransferBody())
             ->assertServerError()
             ->assertJsonFragment(['error' => 'we could not process your transfer, try agin']);
     });
 });
+
+function getDefaultTransferBody(): array
+{
+
+    $payer = User::factory()->customer()->create();
+    $payee = User::factory()->merchant()->create();
+
+    return [
+        'value' => 1000,
+        'payer' => $payer->id,
+        'payee' => $payee->id,
+    ];
+}
