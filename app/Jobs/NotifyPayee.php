@@ -27,7 +27,7 @@ class NotifyPayee implements ShouldQueue
         /** @var string $url */
         $url = config('services.notification_service.url');
 
-        $response = Http::retry([100, 200, 500])
+        $response = Http::retry([250, 500], throw: false)
             ->baseUrl($url)
             // send user info just to pretend is a real service
             ->post('notify', [
