@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Services\Api\V1\TransferService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -91,5 +92,27 @@ describe('Transfer', function () {
         postJson(route('transfer'), $body)
             ->assertForbidden()
             ->assertJsonFragment(['error' => 'you are not authorized to make this transfer']);
+    });
+
+    it('returns a generic 500 error when a unknow error is throw', function () {
+        $transferServiceMock = Mockery::mock(TransferService::class);
+
+        app()->instance(TransferService::class, $transferServiceMock);
+
+        $transferServiceMock->shouldReceive('send')
+            ->andThrow(new Exception('unknow exception'));
+
+        $payer = User::factory()->customer()->create();
+        $payee = User::factory()->merchant()->create();
+
+        $body = [
+            'value' => 1000,
+            'payer' => $payer->id,
+            'payee' => $payee->id,
+        ];
+
+        postJson(route('transfer'), $body)
+            ->assertServerError()
+            ->assertJsonFragment(['error' => 'we could not process your transfer, try agin']);
     });
 });
