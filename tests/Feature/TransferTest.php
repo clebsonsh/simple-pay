@@ -1,11 +1,17 @@
 <?php
 
+use App\Jobs\NotifyPayee;
 use App\Models\User;
 use App\Services\Api\V1\TransferService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Queue;
 
 use function Pest\Laravel\postJson;
+
+beforeEach(function () {
+    Queue::fake(NotifyPayee::class);
+});
 
 describe('Transfer', function () {
     it('allows a customer to transfer to a merchant with proper authorization', function () {
