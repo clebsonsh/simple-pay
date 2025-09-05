@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\NotificationServiceUnavailableException;
 use App\Repositories\Api\V1\UserRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -35,7 +36,7 @@ class NotifyPayee implements ShouldQueue
             ]);
 
         if (! $response->successful()) {
-            $this->fail();
+            $this->fail(new NotificationServiceUnavailableException);
         }
     }
 }
