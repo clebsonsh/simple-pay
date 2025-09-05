@@ -14,7 +14,7 @@ beforeEach(function () {
 });
 
 describe('Transfer', function () {
-    it('allows a customer to transfer to a merchant with proper authorization', function () {
+    it('successfully processes a transfer from a customer to a merchant', function () {
         $url = config('services.authorization_service.url').'authorize';
 
         Http::fake([
@@ -42,7 +42,7 @@ describe('Transfer', function () {
 
     });
 
-    it('prevents a merchant from making a transfer to another user', function () {
+    it('prevents merchants from sending transfers', function () {
         $payer = User::factory()->merchant()->create();
         $payee = User::factory()->merchant()->create();
 
@@ -57,7 +57,7 @@ describe('Transfer', function () {
             ->assertJsonFragment(['error' => 'The payer can not be a user type merchant']);
     });
 
-    it('prevents a users with insuficent balance from transfer', function () {
+    it('prevents transfers from users with insufficient balance', function () {
         $payer = User::factory()->customer()->create([
             'balance' => 999,
         ]);
@@ -75,7 +75,7 @@ describe('Transfer', function () {
             ->assertJsonFragment(['error' => 'The payer does not have enough balance to send this transfer']);
     });
 
-    it('returns a forbidden error when the authorization service denies the transfer', function () {
+    it('fails when the transfer is not authorized', function () {
         $url = config('services.authorization_service.url').'authorize';
 
         Http::fake([
@@ -91,7 +91,7 @@ describe('Transfer', function () {
             ->assertJsonFragment(['error' => 'you are not authorized to make this transfer']);
     });
 
-    it('returns a generic 500 error when a unknow error is throw', function () {
+    it('returns a server error on unexpected exceptions', function () {
         $transferServiceMock = Mockery::mock(TransferService::class);
 
         app()->instance(TransferService::class, $transferServiceMock);
