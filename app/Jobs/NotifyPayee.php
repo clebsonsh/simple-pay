@@ -28,13 +28,13 @@ class NotifyPayee implements ShouldQueue
 
         $response = Http::retry([100, 200, 500])
             ->baseUrl($url)
-            /** send user info just to pretend is a real service */
+            // send user info just to pretend is a real service
             ->post('notify', [
                 'userName' => $payee->name,
                 'userEmail' => $payee->email,
             ]);
 
-        if (! $response->getStatusCode()) {
+        if (! $response->successful()) {
             $this->fail();
         }
     }
