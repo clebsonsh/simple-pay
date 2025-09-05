@@ -13,12 +13,12 @@ use App\Repositories\Api\V1\UserRepository;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-readonly class TransferService
+class TransferService
 {
     public function __construct(
-        private TransferRepository $transferRepository,
-        private UserRepository $userRepository,
-        private AuthorizationService $authorizationService,
+        private readonly TransferRepository $transferRepository,
+        private readonly UserRepository $userRepository,
+        private readonly AuthorizationService $authorizationService,
     ) {}
 
     /**

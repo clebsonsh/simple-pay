@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\NotificationServiceUnavailableException;
 use App\Repositories\Api\V1\UserRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -26,16 +27,16 @@ class NotifyPayee implements ShouldQueue
         /** @var string $url */
         $url = config('services.notification_service.url');
 
-        $response = Http::retry([100, 200, 500])
+        $response = Http::retry([250, 500], throw: false)
             ->baseUrl($url)
-            /** send user info just to pretend is a real service */
+            // send user info just to pretend is a real service
             ->post('notify', [
                 'userName' => $payee->name,
                 'userEmail' => $payee->email,
             ]);
 
-        if (! $response->getStatusCode()) {
-            $this->fail();
+        if (! $response->successful()) {
+            $this->fail(new NotificationServiceUnavailableException);
         }
     }
 }
