@@ -61,7 +61,7 @@ class TransferService
             return $transfer;
         });
 
-        NotifyPayee::dispatch($data['payee']);
+        NotifyPayee::dispatch($transfer);
 
         return $transfer;
     }

@@ -2,8 +2,7 @@
 
 use App\Exceptions\NotificationServiceUnavailableException;
 use App\Jobs\NotifyPayee;
-use App\Models\User;
-use App\Repositories\Api\V1\UserRepository;
+use App\Models\Transfer;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -15,11 +14,11 @@ describe('NotifyPayee', function () {
             $url => Http::response(status: Response::HTTP_NO_CONTENT),
         ]);
 
-        $payee = User::factory()->create();
+        $transfer = Transfer::factory()->create();
 
-        $job = (new NotifyPayee($payee->id))->withFakeQueueInteractions();
+        $job = (new NotifyPayee($transfer))->withFakeQueueInteractions();
 
-        $job->handle(new UserRepository);
+        $job->handle();
 
         $job->assertNotFailed();
 
@@ -33,11 +32,11 @@ describe('NotifyPayee', function () {
             $url => Http::response(status: Response::HTTP_GATEWAY_TIMEOUT),
         ]);
 
-        $payee = User::factory()->create();
+        $transfer = Transfer::factory()->create();
 
-        $job = (new NotifyPayee($payee->id))->withFakeQueueInteractions();
+        $job = (new NotifyPayee($transfer))->withFakeQueueInteractions();
 
-        $job->handle(new UserRepository);
+        $job->handle();
 
         $job->assertFailed();
         $job->assertFailedWith(NotificationServiceUnavailableException::class);
