@@ -37,7 +37,7 @@ class UserFactory extends Factory
     public function customer(): static
     {
         return $this->state(fn (array $attributes) => [
-            'type' => UserType::Cusotmer,
+            'type' => UserType::Customer,
             'cpf_cnpj' => fake()->numberBetween(11111111111, 99999999999),
         ]);
     }

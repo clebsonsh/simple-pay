@@ -101,7 +101,7 @@ describe('Transfer', function () {
 
         postJson(route('transfer'), getDefaultTransferBody())
             ->assertServerError()
-            ->assertJsonFragment(['error' => 'we could not process your transfer, try agin']);
+            ->assertJsonFragment(['error' => 'we could not process your transfer, try again']);
     });
 });
 

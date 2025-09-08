@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum UserType: string
 {
-    case Cusotmer = 'customer';
+    case Customer = 'customer';
     case Merchant = 'merchant';
 }

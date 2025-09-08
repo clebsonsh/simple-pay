@@ -18,6 +18,7 @@ class TransferController extends Controller
     {
         /** @var string[] $data */
         $data = $request->validated();
+
         try {
             return response()->json($transferService->send($data), Response::HTTP_CREATED);
         } catch (WrongUserTypeException|InsufficientBalanceException $e) {
@@ -32,7 +33,7 @@ class TransferController extends Controller
             Log::error($th);
 
             return response()->json([
-                'error' => 'we could not process your transfer, try agin',
+                'error' => 'we could not process your transfer, try again',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
