@@ -24,7 +24,6 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => fake()->uuid(),
             'name' => fake()->name(),
             'cpf_cnpj' => fake()->numberBetween(11111111111, 99999999999999),
             'type' => fake()->randomElement(UserType::cases()),

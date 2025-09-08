@@ -14,7 +14,6 @@ class TransferFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => fake()->uuid(),
             'payer_id' => User::factory()->customer()->create(),
             'payee_id' => User::factory()->create(),
             'value' => fake()->numberBetween(1, 1000000),
