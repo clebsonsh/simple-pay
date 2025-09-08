@@ -117,6 +117,16 @@ curl -X POST http://localhost:8080/api/v1/transfer \
 - **403 Forbidden**: The transfer was denied by the authorization service.
 - **500 Internal Server Error**: An unexpected error occurred.
 
+#### Additional users for manual tests
+
+| ID                                   | Type     | Balance |
+|--------------------------------------|----------|---------|
+| 83666071-2644-39c4-9815-5e339c32c995 | Customer |       0 |
+| 32fe8f68-5882-348f-a0d8-ee59d67ffc46 | Customer |     100 |
+| 327e38fc-300f-3889-a332-f8cd7371760a | Customer |  100000 |
+| 6d57f7e6-b0ff-3358-b4b6-65e914c220ae | Merchant |       0 |
+| 77e4f44b-1954-31a8-ba94-ad836264d75e | Merchant |  100000 |
+
 ## Running Tests
 
 To run the test suite, execute the following command:
