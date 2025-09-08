@@ -4,13 +4,13 @@ Simple Pay is a RESTful API developed in PHP with Laravel, designed to facilitat
 
 ## Features
 
-- **Transfers**: Allows customers to send money to other customers or merchants.
+- **Transfers**: Allows users to send money to other users (customers or merchants).
 - **Validation**:
-  - Merchants are not permitted to initiate transfers.
-  - Ensures the payer has sufficient balance for the transfer.
+  - Validates that merchants cannot initiate transfers.
+  - Ensures the payer has a sufficient balance for the transfer.
 - **External Services**:
-  - Verifies user authorization for transfers through an external service.
-  - Notifies users upon receiving a transfer via an external notification service.
+  - Authorizes transfers using an external service.
+  - Notifies the payee after a successful transfer using an external service.
 - **Queue System**: Handles notifications asynchronously using Laravel Horizon.
 - **Dockerized Environment**: Fully containerized for easy setup and development.
 - **Code Quality**: Utilizes Pint for code style and PHPStan for static analysis.
@@ -74,8 +74,8 @@ The application will be accessible at `http://localhost:8080`.
 
 #### Example Requests
 
-### Example successful Request (may fail for authorization, try again)
-
+##### Example of a Successful Request
+*Note: The mock authorization service may occasionally deny the request. If it fails, please try again.*
 ```bash
 curl -X POST http://localhost:8080/api/v1/transfer \
 -H "Content-Type: application/json" \
@@ -86,7 +86,7 @@ curl -X POST http://localhost:8080/api/v1/transfer \
 }'
 ```
 
-### Example no enough balance fail Request
+##### Example of a Failed Request (Insufficient Balance)
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/transfer \
@@ -98,7 +98,7 @@ curl -X POST http://localhost:8080/api/v1/transfer \
 }'
 ```
 
-### Example payer can not be a user type merchant fail Request
+##### Example of a Failed Request (Merchant as Payer)
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/transfer \
@@ -114,7 +114,7 @@ curl -X POST http://localhost:8080/api/v1/transfer \
 
 - **201 Created**: The transfer was successful.
 - **422 Unprocessable Entity**: Validation error (e.g., insufficient balance, merchant as payer).
-- **403 Forbidden**: The transfer was not authorized by the external service.
+- **403 Forbidden**: The transfer was denied by the authorization service.
 - **500 Internal Server Error**: An unexpected error occurred.
 
 ## Running Tests
