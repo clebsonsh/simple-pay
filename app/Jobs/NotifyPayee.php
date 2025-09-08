@@ -3,7 +3,8 @@
 namespace App\Jobs;
 
 use App\Exceptions\NotificationServiceUnavailableException;
-use App\Repositories\Api\V1\UserRepository;
+use App\Models\Transfer;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
@@ -18,11 +19,12 @@ class NotifyPayee implements ShouldQueue
     /** @var int */
     public $backoff = 30;
 
-    public function __construct(private readonly string $payee_id) {}
+    public function __construct(private readonly Transfer $transfer) {}
 
-    public function handle(UserRepository $userRepository): void
+    public function handle(): void
     {
-        $payee = $userRepository->getById($this->payee_id);
+        /** @var User $payee */
+        $payee = $this->transfer->payee;
 
         /** @var string $url */
         $url = config('services.notification_service.url');
