@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine AS base
+FROM php:8.5-fpm-alpine AS base
 
 RUN apk update && apk add --no-cache \
     curl \
@@ -16,8 +16,7 @@ RUN docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-install \
     pcntl \
     pdo \
-    pdo_mysql \
-    opcache
+    pdo_mysql
 
 ARG USER=laravel
 

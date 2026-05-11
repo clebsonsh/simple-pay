@@ -6,6 +6,7 @@ use App\Services\Api\V1\TransferService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
+use Mockery\Expectation;
 
 use function Pest\Laravel\postJson;
 
@@ -103,7 +104,7 @@ describe('Transfer', function () {
 
         app()->instance(TransferService::class, $transferServiceMock);
 
-        /** @var \Mockery\Expectation $expectation */
+        /** @var Expectation $expectation */
         $expectation = $transferServiceMock->shouldReceive('send');
         $expectation->andThrow(new Exception('unknow exception'));
 
