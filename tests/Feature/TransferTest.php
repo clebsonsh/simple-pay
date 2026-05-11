@@ -15,14 +15,18 @@ beforeEach(function () {
 
 describe('Transfer', function () {
     it('successfully processes a transfer from a customer to a merchant', function () {
-        $url = config('services.authorization_service.url').'authorize';
+        /** @var string */
+        $baseUrl = config('services.authorization_service.url');
+        $url = $baseUrl.'authorize';
 
         Http::fake([
             $url => Http::response(
                 [
                     'status' => 'success',
                     'data' => ['authorization' => true],
-                ], Response::HTTP_OK),
+                ],
+                Response::HTTP_OK
+            ),
         ]);
 
         $payer = User::factory()->customer()->create();
@@ -39,7 +43,6 @@ describe('Transfer', function () {
             ->assertJsonFragment(['payer_id' => $payer->id])
             ->assertJsonFragment(['payee_id' => $payee->id])
             ->assertJsonFragment(['value' => 1000]);
-
     });
 
     it('prevents merchants from sending transfers', function () {
@@ -76,14 +79,18 @@ describe('Transfer', function () {
     });
 
     it('fails when the transfer is not authorized', function () {
-        $url = config('services.authorization_service.url').'authorize';
+        /** @var string */
+        $baseUrl = config('services.authorization_service.url');
+        $url = $baseUrl.'authorize';
 
         Http::fake([
             $url => Http::response(
                 [
                     'status' => 'fail',
                     'data' => ['authorization' => false],
-                ], Response::HTTP_FORBIDDEN),
+                ],
+                Response::HTTP_FORBIDDEN
+            ),
         ]);
 
         postJson(route('transfer'), getDefaultTransferBody())
@@ -96,8 +103,9 @@ describe('Transfer', function () {
 
         app()->instance(TransferService::class, $transferServiceMock);
 
-        $transferServiceMock->shouldReceive('send')
-            ->andThrow(new Exception('unknow exception'));
+        /** @var \Mockery\Expectation $expectation */
+        $expectation = $transferServiceMock->shouldReceive('send');
+        $expectation->andThrow(new Exception('unknow exception'));
 
         postJson(route('transfer'), getDefaultTransferBody())
             ->assertServerError()
@@ -105,6 +113,9 @@ describe('Transfer', function () {
     });
 });
 
+/**
+ * @return array{'value': int, 'payer': string, 'payee': string}
+ */
 function getDefaultTransferBody(): array
 {
 

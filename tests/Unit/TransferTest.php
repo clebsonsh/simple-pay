@@ -3,18 +3,21 @@
 use App\Models\Transfer;
 use App\Models\User;
 
+use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertModelExists;
+
 describe('Transfer', function () {
     it('creates a single transfer', function () {
         $transfer = Transfer::factory()->create();
 
-        $this->assertModelExists($transfer);
+        assertModelExists($transfer);
     });
 
     it('creates multiple transfers', function () {
         $count = 5;
         Transfer::factory()->count($count)->create();
 
-        $this->assertDatabaseCount('transfers', $count);
+        assertDatabaseCount('transfers', $count);
     });
 
     it('creates transfer with a payer and payee', function () {

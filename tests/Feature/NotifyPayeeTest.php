@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Http;
 
 describe('NotifyPayee', function () {
     it('successfully notifies the payee', function () {
-        $url = config('services.notification_service.url').'notify';
+        /** @var string */
+        $baseUrl = config('services.notification_service.url');
+        $url = $baseUrl.'notify';
 
         Http::fake([
             $url => Http::response(status: Response::HTTP_NO_CONTENT),
@@ -26,7 +28,9 @@ describe('NotifyPayee', function () {
     });
 
     it('fails if the notification service is unreachable', function () {
-        $url = config('services.notification_service.url').'notify';
+        /** @var string */
+        $baseUrl = config('services.notification_service.url');
+        $url = $baseUrl.'notify';
 
         Http::fake([
             $url => Http::response(status: Response::HTTP_GATEWAY_TIMEOUT),
